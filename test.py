@@ -16,6 +16,17 @@ class GameSprite(sprite.Sprite):
         self.rect.y = player_y
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
+class Player(GameSprite):
+    def update(self):
+        keys_pressed = key.get_pressed()
+        if keys_pressed[K_LEFT] and self.rect.x > 0:
+            self.rect.x -= self.speed
+        if keys_pressed[K_RIGHT] and self.rect.x < 640:
+            self.rect.x += self.speed
+        if keys_pressed[K_UP] and self.rect.y > 0:
+            self.rect.y -= self.speed
+        if keys_pressed[K_DOWN] and self.rect.y < 440:
+            self.rect.y += self.speed
 while game:
     for e in event.get():
         if e.type == QUIT:
