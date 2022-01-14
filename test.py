@@ -3,6 +3,8 @@ clock = time.Clock()
 window = display.set_mode((700,500))
 display.set_caption("Пинг-понг")
 speed = 10
+font.init()
+font = font.SysFont('Arial', 30)
 background = transform.scale(image.load("background.jpg"), (700,500))
 game = True
 Fps = 90003000
@@ -36,7 +38,7 @@ class Enemy(GameSprite):
             self.rect.y += self.speed
 gamer1 = Player("P1.png", 15, 250, 10, 40, 60)
 gamer2 = Enemy("P2.png", 660, 250, 10, 40, 60)
-ball = GameSprite("ball.png", 350, 250, 15, 20, 60)
+ball = GameSprite("ball.png", 350, 250, 15, 60, 60)
 while game:
     for e in event.get():
         if e.type == QUIT:
@@ -46,6 +48,8 @@ while game:
         ball.rect.y += speed_y
         if ball.rect.y > win_height-50 or ball.rect.y < 0:
             speed_y *= -1
+        if sprite.collide_rect(gamer1, ball) or sprite.collide_rect(gamer2, ball):
+            speed_x *= -1
         window.blit(background,(0,0))
         gamer1.reset()
         gamer2.reset()
@@ -53,5 +57,11 @@ while game:
         gamer1.update()
         gamer2.update()
         ball.update()
+        if ball.rect.x <= 10 or ball.rect.x >= 690:
+            finish = True
+            lose = font.render(
+            'YOU LOSE!', True, (185, 0, 0)
+            )
+            window.blit(lose,(300,245))
     clock.tick(Fps)
     display.update()
